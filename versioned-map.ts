@@ -8,19 +8,19 @@ interface Operation {
 export class VersionedMap {
     private version: number;
     private currentMap: Map<string, string>;
-    private history: Operation[];
+    private operations: Operation[];
 
     constructor(){
         this.version = 0;
         this.currentMap = new Map();
-        this.history = [];
+        this.operations = [];
     }
 
     private rebuildMap(version: number){
         const map = new VersionedMap();
 
         for (let index = 0; index < version; index++) {
-            const op = this.history[index];
+            const op = this.operations[index];
             map[op.name](op.params.key, op.params.value);
         }
 
@@ -41,7 +41,7 @@ export class VersionedMap {
     }
 
     public put(key: string, value: string){
-        this.history.push({ name: 'put', params: { key, value } });
+        this.operations.push({ name: 'put', params: { key, value } });
         this.currentMap.set(key, value);
         this.version++;
         return this.version;
@@ -49,7 +49,7 @@ export class VersionedMap {
 
     public erase(key: string){
         if(this.currentMap.has(key)){
-            this.history.push({ name: 'erase', params: { key } });
+            this.operations.push({ name: 'erase', params: { key } });
             this.currentMap.delete(key);
             this.version++;
             return this.version;
