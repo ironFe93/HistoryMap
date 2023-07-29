@@ -34,6 +34,6 @@ export class VersionedMap {
     }
 
     public getVersion(){
-        return this.getVersion();
+        return this.version;
     };
 }
