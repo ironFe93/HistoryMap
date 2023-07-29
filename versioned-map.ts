@@ -11,9 +11,10 @@ export class VersionedMap {
 
     public get(key: string, version?: number){
         if(version){
-            return this.history.has(version) ? this.history.get(version)?.get(key) : null;    
+            const previousVersion = this.history.get(version);
+            return previousVersion ? previousVersion.get(key) || null : null;    
         }
-        return this.currentMap.get(key);
+        return this.currentMap.get(key) || null;
     }
 
     public put(key: string, value: string){
